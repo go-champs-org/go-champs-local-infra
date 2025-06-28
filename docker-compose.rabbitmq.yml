@@ -1,0 +1,35 @@
+networks:
+  go-champs-shared-network:
+    external: true
+
+services:
+  rabbitmq:
+    container_name: shared-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    hostname: shared-rabbitmq
+    volumes:
+      - rabbitmq-shared-data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: local_user
+      RABBITMQ_DEFAULT_PASS: local_pass
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_NODENAME: rabbit@shared-rabbitmq
+    networks:
+      go-champs-shared-network:
+        aliases:
+          - rabbitmq
+          - shared-rabbitmq
+    ports:
+      - '5672:5672'   # AMQP protocol port
+      - '15672:15672' # Management UI port
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  rabbitmq-shared-data:
+    name: shared-rabbitmq-data
+
