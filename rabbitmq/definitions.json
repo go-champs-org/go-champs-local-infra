@@ -1,0 +1,185 @@
+{
+  "exchanges": [
+    {
+      "name": "game-events",
+      "type": "topic",
+      "durable": false,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "dead-letter-exchange",
+      "type": "topic",
+      "durable": false,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "retry-exchange",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "game-events",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "game-events-live-mode",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "dead-letter-exchange"
+      }
+    },
+    {
+      "name": "game-events-stats",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "dead-letter",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "game-events-live-mode-retry-1",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-events-live-mode"
+      }
+    },
+    {
+      "name": "game-events-live-mode-retry-2",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-events-live-mode"
+      }
+    },
+    {
+      "name": "game-events-live-mode-retry-3",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-events-live-mode"
+      }
+    },
+    {
+      "name": "game-events-live-mode-retry-4",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-events-live-mode"
+      }
+    },
+    {
+      "name": "game-events-live-mode-retry-5",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-events-live-mode"
+      }
+    },
+    {
+      "name": "finalized-game-results",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "billing-agreement-acceptance",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "game-events",
+      "destination": "game-events",
+      "destination_type": "queue",
+      "routing_key": "game-events.*",
+      "arguments": {}
+    },
+    {
+      "source": "game-events",
+      "destination": "game-events-live-mode",
+      "destination_type": "queue",
+      "routing_key": "game-events.live-mode",
+      "arguments": {}
+    },
+    {
+      "source": "game-events",
+      "destination": "game-events-stats",
+      "destination_type": "queue",
+      "routing_key": "game-events.player-stats",
+      "arguments": {}
+    },
+    {
+      "source": "game-events",
+      "destination": "game-events-stats",
+      "destination_type": "queue",
+      "routing_key": "game-events.team-stats",
+      "arguments": {}
+    },
+    {
+      "source": "dead-letter-exchange",
+      "destination": "dead-letter",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-events-live-mode-retry-1",
+      "destination_type": "queue",
+      "routing_key": "game-events-live-mode-retry-1",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-events-live-mode-retry-2",
+      "destination_type": "queue",
+      "routing_key": "game-events-live-mode-retry-2",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-events-live-mode-retry-3",
+      "destination_type": "queue",
+      "routing_key": "game-events-live-mode-retry-3",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-events-live-mode-retry-4",
+      "destination_type": "queue",
+      "routing_key": "game-events-live-mode-retry-4",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-events-live-mode-retry-5",
+      "destination_type": "queue",
+      "routing_key": "game-events-live-mode-retry-5",
+      "arguments": {}
+    }
+  ]
+}
