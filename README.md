@@ -76,7 +76,9 @@ Two rules that are not obvious:
 **The file must describe production exactly.** Since the applications apply it
 with AMQP declares, any divergence from what the broker already holds fails the
 deploy. Fixing something "in passing" while editing this file breaks every
-deploy that follows.
+deploy that follows. Changing a property of an object that already exists is a
+migration, not an edit — see [Exchange durability](#exchange-durability) for the
+one case that has one.
 
 **Order matters, differently per direction.** Additions can go out ahead of the
 applications that need them. Removals go last, after every application has
@@ -87,13 +89,22 @@ purpose.
 There is no `vhost` key on any object. The applications get the vhost from their
 own connection, and on CloudAMQP it is not `/`.
 
-## Known deviation
+## Exchange durability
 
-`game-events` and `dead-letter-exchange` are **transient**, because that is how
-`go_champs_scoreboard` declares them today. A broker restart drops both, along
-with every binding on them.
+Every exchange here is durable. `game-events` and `dead-letter-exchange` were
+not always: `go_champs_scoreboard` declared both without `durable: true`, so a
+broker restart dropped them and every binding on them, and the next application
+boot quietly recreated them. That silent repair is what kept production working,
+and it stopped being available once the applications began asserting the
+topology instead of declaring it at boot.
 
-The file records that faithfully rather than fixing it: describing them as
-durable would fail every deploy against the current broker. Making them durable
-requires deleting and recreating both exchanges, which drops all bindings — a
-migration with a window, tracked separately.
+Making them durable means deleting and recreating them, which drops their
+bindings. `mix rabbitmq.migrate.exchange_durability` in the scoreboard does
+exactly that during the release phase, and the declare that follows restores the
+bindings from this file. It only ever deletes an exchange it has confirmed is
+non-durable, which is an object the broker would have discarded on its own at
+the next restart.
+
+Durable exchanges and durable queues still do not make a *message* survive a
+restart — that needs `persistent: true` on publish, which the publishers do not
+all set yet. Tracked separately.
