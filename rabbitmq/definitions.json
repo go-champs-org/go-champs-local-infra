@@ -108,6 +108,14 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {}
+    },
+    {
+      "name": "game-recording-events",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "dead-letter-exchange"
+      }
     }
   ],
   "bindings": [
