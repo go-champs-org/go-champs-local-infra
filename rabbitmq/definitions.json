@@ -116,6 +116,51 @@
       "arguments": {
         "x-dead-letter-exchange": "dead-letter-exchange"
       }
+    },
+    {
+      "name": "game-recording-events-retry-1",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-recording-events"
+      }
+    },
+    {
+      "name": "game-recording-events-retry-2",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-recording-events"
+      }
+    },
+    {
+      "name": "game-recording-events-retry-3",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-recording-events"
+      }
+    },
+    {
+      "name": "game-recording-events-retry-4",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-recording-events"
+      }
+    },
+    {
+      "name": "game-recording-events-retry-5",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "",
+        "x-dead-letter-routing-key": "game-recording-events"
+      }
     }
   ],
   "bindings": [
@@ -187,6 +232,41 @@
       "destination": "game-events-live-mode-retry-5",
       "destination_type": "queue",
       "routing_key": "game-events-live-mode-retry-5",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-recording-events-retry-1",
+      "destination_type": "queue",
+      "routing_key": "game-recording-events-retry-1",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-recording-events-retry-2",
+      "destination_type": "queue",
+      "routing_key": "game-recording-events-retry-2",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-recording-events-retry-3",
+      "destination_type": "queue",
+      "routing_key": "game-recording-events-retry-3",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-recording-events-retry-4",
+      "destination_type": "queue",
+      "routing_key": "game-recording-events-retry-4",
+      "arguments": {}
+    },
+    {
+      "source": "retry-exchange",
+      "destination": "game-recording-events-retry-5",
+      "destination_type": "queue",
+      "routing_key": "game-recording-events-retry-5",
       "arguments": {}
     }
   ]
